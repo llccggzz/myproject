@@ -64,6 +64,7 @@
     }
 
     input[type="checkbox"]:checked {
+      filter: sepia(100%) saturate(10);
       background-color: orange;
 
     }
@@ -73,9 +74,7 @@
       width: 100px;
     }
 
-    input[type="checkbox"] :checked {
-      background-color: orange;
-    }
+
 
     /* 按钮样式 */
     button {
@@ -96,11 +95,22 @@
     }
 
     /* 总价样式 */
-    totalPrice {
-      font-weight: bold;
+    .totalPrice {
+
       margin-top: 20px;
       color: orange;
     }
+
+    .totalPriceNum {
+      font-size: 30px;
+      color: orange;
+    }
+
+    .yuan {
+      color: orange;
+    }
+
+
 
     .bottom {
       display: flex;
@@ -108,21 +118,35 @@
 
     }
 
-    .bottom p:nth-child(2) {
-      margin-left: 1100px;
+
+
+    .bottom p:nth-child(3) {
+      margin-left: 1030px;
       color: orange;
     }
 
+    .bottom p:nth-child(2) {
+      font-size: 16px;
+      color: orange;
+      margin-top: 18px;
+    }
+
     .bottom button {
-      margin-left: 1320px;
+      margin-left: 1310px;
       background-color: orange;
       position: absolute;
       width: 120px;
-      color: white
+      color: white;
+      height: 36px;
+
     }
 
     .xiaoji {
       color: orange;
+    }
+
+    .border {
+      border-bottom: 3px solid orange;
     }
   </style>
 </head>
@@ -135,6 +159,7 @@
         <img src="./images/小米.png">
         <p>我的购物车</p>
       </div>
+      <div class="border"></div>
       <table>
         <tr>
           <td><input type="checkbox" v-model="checkAll">全选</td>
@@ -147,16 +172,16 @@
           <td>操作</td>
         </tr>
 
-        <tr v-for="g in goods" :key="g.id">
+        <tr v-for="g,index in goods" :key="g.id">
           <td><input type="checkbox" v-model="g.isChecked"></td>
           <td><img class="goodsImg" :src="g.img"></td>
           <td>{{g.name}}</td>
           <td>{{g.price}}元</td>
           <td>
             <div class="num">
-              <button type="button" @click="add(g.id)">+</button>
+              <button type="button" @click="reduce(index)">-</button>
               <input type="text" :value="g.num">
-              <button type="button" @click="reduce(g.id)">-</button>
+              <button type="button" @click="add(index)">+</button>
               <!-- {{g.num}} -->
             </div>
 
@@ -169,8 +194,13 @@
         </tr>
       </table>
       <div class="bottom">
-        <p>已选择{{checkedNum}}件商品</p>
-        <p class="totalPrice">总价：{{totalPrice}}元</p>
+        <p>已选择
+        <p class="checkedNum">{{checkedNum}}</p>件商品</p>
+        <p class="totalPrice">
+          合计：
+        <p class="totalPriceNum">{{totalPrice}}</p>
+        <p class="yuan">元</p>
+        </p>
         <button>去结算</button>
       </div>
 
@@ -224,11 +254,11 @@
       },
       methods: {
         add(id) {
-          this.goods[id - 1].num++
+          this.goods[id].num++
         },
         reduce(id) {
-          if (g.num > 0) {
-            this.goods[id - 1].num--
+          if (this.goods[id].num > 0) {
+            this.goods[id].num--
           }
         },
         del(id) {
